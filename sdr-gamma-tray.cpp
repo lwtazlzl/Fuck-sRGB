@@ -57,7 +57,10 @@ public:
             MessageBoxW(nullptr, error_.c_str(), title, MB_OK | MB_ICONWARNING);
         if (!addIcon()) fail(L"Add tray icon");
         if (!SetTimer(hwnd_, 1, 2000, nullptr)) fail(L"Start display monitoring");
-        startWork(current_.mode, false);
+        if (hdr_ == HdrState::Active && current_.mode == Mode::Srgb)
+            startWork(Mode::Gamma22, true);
+        else
+            startWork(current_.mode, false);
 
         MSG msg{};
         int status;
@@ -319,7 +322,3 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, PWSTR, int) {
     }
     return 1;
 }
-
-
-
-
